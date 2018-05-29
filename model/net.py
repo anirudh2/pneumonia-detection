@@ -40,7 +40,7 @@ class Net(nn.Module):
         self.conv1 = nn.Conv2d(1, self.num_channels, 26, stride=4, padding=1)
         # 
         # 1 fully connected layers to transform the output of the convolution layers to the final output
-        self.fc1 = nn.Linear(self.num_channels*25*25, 2)
+        self.fc1 = nn.Linear(self.num_channels*25*25, 1)
         
         self.dropout_rate = params.dropout_rate
 
@@ -73,10 +73,10 @@ class Net(nn.Module):
         
         # apply 1 fully connected layer with dropout
 #         s = F.dropout(F.relu())
-        
+#         pdb.set_trace()
         # apply log softmax on each image's output (this is recommended over applying softmax
         # since it is numerically more stable)
-        return F.log_softmax(out6, dim=1)
+        return  out6.view(batch_size) #.log_softmax(out6, dim=1)
 
 
 def loss_fn(outputs, labels):
@@ -84,8 +84,8 @@ def loss_fn(outputs, labels):
     Compute the cross entropy loss given outputs and labels.
 
     Args:
-        outputs: (Variable) dimension batch_size x 6 - output of the model
-        labels: (Variable) dimension batch_size, where each element is a value in [0, 1, 2, 3, 4, 5]
+        outputs: (Variable) dimension batch_size x 2 - output of the model
+        labels: (Variable) dimension batch_size, where each element is a value in [0, 1]
 
     Returns:
         loss (Variable): cross entropy loss for all images in the batch
@@ -93,8 +93,22 @@ def loss_fn(outputs, labels):
     Note: you may use a standard loss function from http://pytorch.org/docs/master/nn.html#loss-functions. This example
           demonstrates how you can easily define a custom loss function.
     """
-    num_examples = outputs.size()[0]
-    return -torch.sum(outputs[range(num_examples), labels])/num_examples
+#     num_examples = outputs.size()[0]
+#     pdb.set_trace()
+#     return -torch.sum(outputs[range(num_examples), labels])/num_examples
+#     pdb.set_trace()
+    weights = torch.ones(labels.size())
+    weights[labels==0] = 0.005
+    weights[labels==1] = 0.995
+    loss = nn.BCEWithLogitsLoss()#weight=weights)
+#     pdb.set_trace()
+#     print(nn.Sigmoid(outputs))
+
+    #calculating loss by hand doesn't match the function. Assuming all labels are 0's
+    tmpFn = nn.Sigmoid()
+    loss_manual = np.sum(np.log(1-tmpFn(outputs).data.numpy()))
+    pdb.set_trace()
+    return loss(outputs, labels.float())
 
 
 def accuracy(outputs, labels):
@@ -107,7 +121,8 @@ def accuracy(outputs, labels):
 
     Returns: (float) accuracy in [0,1]
     """
-    outputs = np.argmax(outputs, axis=1)
+#     pdb.set_trace()
+    outputs = np.argmax(outputs, axis=0)
     return np.sum(outputs==labels)/float(labels.size)
 
 
