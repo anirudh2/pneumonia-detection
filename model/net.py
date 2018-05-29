@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import pdb
 
 class Net(nn.Module):
     """
@@ -38,9 +38,9 @@ class Net(nn.Module):
         # stride, padding). We also include batch normalisation layers that help stabilise training.
         # For more details on how to use these layers, check out the documentation.
         self.conv1 = nn.Conv2d(1, self.num_channels, 26, stride=4, padding=1)
-
-        # 2 fully connected layers to transform the output of the convolution layers to the final output
-        self.fc1 = nn.Linear(26*26*self.num_channels, 2)
+        # 
+        # 1 fully connected layers to transform the output of the convolution layers to the final output
+        self.fc1 = nn.Linear(32*self.num_channels*25*25, 32)
         
         self.dropout_rate = params.dropout_rate
 
@@ -56,20 +56,25 @@ class Net(nn.Module):
 
         Note: the dimensions after each step are provided
         """
-        #                                                  -> batch_size x 3 x 64 x 64
-        # we apply the convolution layers, followed by batch normalisation, maxpool and relu x 3
-        s = self.conv1(s)                         # batch_size x num_channels x 64 x 64
-        s = F.relu(F.max_pool2d(s, 2))                      # batch_size x num_channels x 32 x 32
+        # we apply the convolution layers
+        out1 = self.conv1(s)
+#         pdb.set_trace()
+        out2 = F.relu(F.max_pool2d(out1, 2))
 
         # flatten the output for each image
-        s = s.view(-1, 26*26*self.num_channels)             # batch_size x 8*8*num_channels*4
-
-        # apply 2 fully connected layers with dropout
-        s = F.dropout(F.relu(self.fc1(s)))   # batch_size x self.num_channels*4
-
+        out3 = out2.view(-1, 640000)
+        
+        out4 = self.fc1(out3)
+#         pdb.set_trace()
+        out5 = F.relu(out4)
+        out6 = F.dropout(out5)
+        
+        # apply 1 fully connected layer with dropout
+#         s = F.dropout(F.relu())
+        
         # apply log softmax on each image's output (this is recommended over applying softmax
         # since it is numerically more stable)
-        return F.log_softmax(s, dim=1)
+        return F.log_softmax(out6, dim=1)
 
 
 def loss_fn(outputs, labels):

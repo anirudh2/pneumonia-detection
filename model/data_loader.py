@@ -1,5 +1,6 @@
 import random
 import os
+import pdb
 
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader
@@ -10,14 +11,16 @@ import torchvision.transforms as transforms
 # define a training image loader that specifies transforms on images. See documentation for more details.
 train_transformer = transforms.Compose([
     transforms.Resize(224),  # resize the image to 64x64 (remove if images are already 64x64)
-    transforms.RandomHorizontalFlip(),  # randomly flip image horizontally
+    transforms.RandomHorizontalFlip(), # randomly flip image horizontally
+    transforms.Grayscale(num_output_channels=1), # make grayscale  
     transforms.ToTensor()])  # transform it into a torch tensor
+    
 
 # loader for evaluation, no horizontal flip
 eval_transformer = transforms.Compose([
     transforms.Resize(224),  # resize the image to 64x64 (remove if images are already 64x64)
+    transforms.Grayscale(num_output_channels=1), # make grayscale
     transforms.ToTensor()])  # transform it into a torch tensor
-
 
 class CXRDataset(Dataset):
     """
@@ -86,5 +89,6 @@ def fetch_dataloader(types, data_dir, params):
                                 pin_memory=params.cuda)
 
             dataloaders[split] = dl
+#             pdb.set_trace()
 
     return dataloaders

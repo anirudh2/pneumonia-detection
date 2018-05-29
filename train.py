@@ -3,12 +3,16 @@
 import argparse
 import logging
 import os
-
+import pdb
+    
 import numpy as np
 import torch
 import torch.optim as optim
 from torch.autograd import Variable
 from tqdm import tqdm
+from PIL import Image
+import matplotlib.pyplot as plt 
+import matplotlib.image as mpimg
 
 import utils
 import model.net as net
@@ -38,7 +42,7 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params):
 
     # set model to training mode
     model.train()
-
+    
     # summary for current training loop and a running average object for loss
     summ = []
     loss_avg = utils.RunningAverage()
@@ -51,7 +55,7 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params):
                 train_batch, labels_batch = train_batch.cuda(async=True), labels_batch.cuda(async=True)
             # convert to torch Variables
             #train_batch, labels_batch = Variable(train_batch), Variable(labels_batch)
-
+#             pdb.set_trace()
             # compute model output and loss
             output_batch = model(train_batch)
             loss = loss_fn(output_batch, labels_batch)
@@ -169,7 +173,7 @@ if __name__ == '__main__':
     dataloaders = data_loader.fetch_dataloader(['train', 'val'], args.data_dir, params)
     train_dl = dataloaders['train']
     val_dl = dataloaders['val']
-
+#     pdb.set_trace()
     logging.info("- done.")
 
     # Define the model and optimizer
