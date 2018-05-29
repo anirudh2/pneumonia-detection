@@ -98,16 +98,16 @@ def loss_fn(outputs, labels):
 #     return -torch.sum(outputs[range(num_examples), labels])/num_examples
 #     pdb.set_trace()
     weights = torch.ones(labels.size())
-    weights[labels==0] = 0.005
-    weights[labels==1] = 0.995
-    loss = nn.BCEWithLogitsLoss()#weight=weights)
+    weights[labels==1] = 0.005
+    weights[labels==0] = 0.995
+    loss = nn.BCEWithLogitsLoss(weight=weights)
 #     pdb.set_trace()
 #     print(nn.Sigmoid(outputs))
 
-    #calculating loss by hand doesn't match the function. Assuming all labels are 0's
-    tmpFn = nn.Sigmoid()
-    loss_manual = np.sum(np.log(1-tmpFn(outputs).data.numpy()))
-    pdb.set_trace()
+#     # Manually calculating loss for comparision
+#     tmpFn = nn.Sigmoid()
+#     loss_manual = np.mean(np.log(1-tmpFn(outputs).data.numpy()))
+#     pdb.set_trace()
     return loss(outputs, labels.float())
 
 
