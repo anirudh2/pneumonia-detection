@@ -55,7 +55,7 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params):
                 train_batch, labels_batch = train_batch.cuda(async=True), labels_batch.cuda(async=True)
             # convert to torch Variables
             #train_batch, labels_batch = Variable(train_batch), Variable(labels_batch)
-#             pdb.set_trace()
+    #             pdb.set_trace()
             # compute model output and loss
             output_batch = model(train_batch)
             loss = loss_fn(output_batch, labels_batch)

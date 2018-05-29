@@ -40,7 +40,7 @@ class Net(nn.Module):
         self.conv1 = nn.Conv2d(1, self.num_channels, 26, stride=4, padding=1)
         # 
         # 1 fully connected layers to transform the output of the convolution layers to the final output
-        self.fc1 = nn.Linear(32*self.num_channels*25*25, 32)
+        self.fc1 = nn.Linear(self.num_channels*25*25, 2)
         
         self.dropout_rate = params.dropout_rate
 
@@ -59,10 +59,12 @@ class Net(nn.Module):
         # we apply the convolution layers
         out1 = self.conv1(s)
 #         pdb.set_trace()
+        batch_size = out1.size()[0]
         out2 = F.relu(F.max_pool2d(out1, 2))
 
-        # flatten the output for each image
-        out3 = out2.view(-1, 640000)
+        # flatten the output for each image       
+#         pdb.set_trace()
+        out3 = out2.view(batch_size, self.num_channels*25*25)
         
         out4 = self.fc1(out3)
 #         pdb.set_trace()
