@@ -98,8 +98,8 @@ def loss_fn(outputs, labels):
 #     return -torch.sum(outputs[range(num_examples), labels])/num_examples
 #     pdb.set_trace()
     weights = torch.ones(labels.size())
-    weights[labels==1] = 0.005
-    weights[labels==0] = 0.995
+    weights[labels==1] = 100
+    weights[labels==0] = 0
     loss = nn.BCEWithLogitsLoss(weight=weights)
 #     pdb.set_trace()
 #     print(nn.Sigmoid(outputs))

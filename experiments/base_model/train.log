@@ -460,3 +460,275 @@
 2018-05-29 23:06:58,925:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.684
 2018-05-29 23:06:58,934:INFO: - Found new best accuracy
 2018-05-29 23:06:58,934:INFO: Epoch 3/10
+2018-06-01 21:36:33,146:INFO: Loading the datasets...
+2018-06-01 21:36:33,361:INFO: - done.
+2018-06-01 21:36:33,439:INFO: Starting training for 10 epoch(s)
+2018-06-01 21:36:33,439:INFO: Epoch 1/10
+2018-06-01 21:36:56,842:INFO: - Train metrics: accuracy: 0.500 ; loss: 0.004
+2018-06-01 21:37:01,660:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:37:01,667:INFO: - Found new best accuracy
+2018-06-01 21:37:01,667:INFO: Epoch 2/10
+2018-06-01 21:37:22,783:INFO: - Train metrics: accuracy: 1.000 ; loss: 0.003
+2018-06-01 21:37:26,909:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:37:26,916:INFO: - Found new best accuracy
+2018-06-01 21:37:26,917:INFO: Epoch 3/10
+2018-06-01 21:37:47,804:INFO: - Train metrics: accuracy: 0.984 ; loss: 0.014
+2018-06-01 21:37:52,065:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:37:52,073:INFO: - Found new best accuracy
+2018-06-01 21:37:52,073:INFO: Epoch 4/10
+2018-06-01 21:38:13,201:INFO: - Train metrics: accuracy: 0.984 ; loss: 0.014
+2018-06-01 21:38:17,515:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:38:17,522:INFO: - Found new best accuracy
+2018-06-01 21:38:17,522:INFO: Epoch 5/10
+2018-06-01 21:38:38,496:INFO: - Train metrics: accuracy: 1.000 ; loss: 0.003
+2018-06-01 21:38:42,673:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:38:42,679:INFO: - Found new best accuracy
+2018-06-01 21:38:42,680:INFO: Epoch 6/10
+2018-06-01 21:39:03,414:INFO: - Train metrics: accuracy: 1.000 ; loss: 0.003
+2018-06-01 21:39:07,806:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:39:07,813:INFO: - Found new best accuracy
+2018-06-01 21:39:07,813:INFO: Epoch 7/10
+2018-06-01 21:39:30,829:INFO: - Train metrics: accuracy: 1.000 ; loss: 0.003
+2018-06-01 21:39:35,752:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:39:35,759:INFO: - Found new best accuracy
+2018-06-01 21:39:35,765:INFO: Epoch 8/10
+2018-06-01 21:40:00,038:INFO: - Train metrics: accuracy: 1.000 ; loss: 0.003
+2018-06-01 21:40:04,476:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:40:04,483:INFO: - Found new best accuracy
+2018-06-01 21:40:04,501:INFO: Epoch 9/10
+2018-06-01 21:40:26,170:INFO: - Train metrics: accuracy: 1.000 ; loss: 0.003
+2018-06-01 21:40:30,064:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:40:30,071:INFO: - Found new best accuracy
+2018-06-01 21:40:30,083:INFO: Epoch 10/10
+2018-06-01 21:40:50,998:INFO: - Train metrics: accuracy: 1.000 ; loss: 0.003
+2018-06-01 21:40:55,033:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:40:55,040:INFO: - Found new best accuracy
+2018-06-01 21:45:50,331:INFO: Loading the datasets...
+2018-06-01 21:45:50,352:INFO: - done.
+2018-06-01 21:45:50,354:INFO: Starting training for 2 epoch(s)
+2018-06-01 21:45:50,355:INFO: Epoch 1/2
+2018-06-01 21:46:13,313:INFO: - Train metrics: accuracy: 0.500 ; loss: 0.004
+2018-06-01 21:46:17,551:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:46:17,558:INFO: - Found new best accuracy
+2018-06-01 21:46:17,563:INFO: Epoch 2/2
+2018-06-01 21:46:40,332:INFO: - Train metrics: accuracy: 1.000 ; loss: 0.003
+2018-06-01 21:46:44,438:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.009
+2018-06-01 21:46:44,446:INFO: - Found new best accuracy
+2018-06-01 22:19:17,600:INFO: Loading the datasets...
+2018-06-01 22:19:17,621:INFO: - done.
+2018-06-01 22:19:17,623:INFO: Starting training for 2 epoch(s)
+2018-06-01 22:19:17,623:INFO: Epoch 1/2
+2018-06-01 22:19:41,870:INFO: - Train metrics: accuracy: 0.000 ; loss: 0.000
+2018-06-01 22:19:46,507:INFO: - Eval metrics : accuracy: 0.029 ; loss: 0.000
+2018-06-01 22:19:46,515:INFO: - Found new best accuracy
+2018-06-01 22:19:46,527:INFO: Epoch 2/2
+2018-06-01 22:20:08,187:INFO: - Train metrics: accuracy: 0.000 ; loss: 0.000
+2018-06-01 22:20:12,632:INFO: - Eval metrics : accuracy: 0.029 ; loss: 0.000
+2018-06-01 22:20:12,639:INFO: - Found new best accuracy
+2018-06-01 22:22:09,720:INFO: Loading the datasets...
+2018-06-01 22:22:09,740:INFO: - done.
+2018-06-01 22:22:09,742:INFO: Starting training for 2 epoch(s)
+2018-06-01 22:22:09,742:INFO: Epoch 1/2
+2018-06-01 22:22:30,061:INFO: - Train metrics: accuracy: 0.500 ; loss: 0.000
+2018-06-01 22:22:34,285:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.006
+2018-06-01 22:22:34,292:INFO: - Found new best accuracy
+2018-06-01 22:22:34,313:INFO: Epoch 2/2
+2018-06-01 22:22:54,473:INFO: - Train metrics: accuracy: 1.000 ; loss: 0.000
+2018-06-01 22:23:10,081:INFO: Loading the datasets...
+2018-06-01 22:23:10,101:INFO: - done.
+2018-06-01 22:23:10,103:INFO: Starting training for 2 epoch(s)
+2018-06-01 22:23:10,103:INFO: Epoch 1/2
+2018-06-01 22:23:30,779:INFO: - Train metrics: accuracy: 0.500 ; loss: 0.000
+2018-06-01 22:23:35,142:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.011
+2018-06-01 22:23:35,150:INFO: - Found new best accuracy
+2018-06-01 22:23:35,154:INFO: Epoch 2/2
+2018-06-01 22:23:51,947:INFO: Loading the datasets...
+2018-06-01 22:23:51,968:INFO: - done.
+2018-06-01 22:23:51,970:INFO: Starting training for 2 epoch(s)
+2018-06-01 22:23:51,970:INFO: Epoch 1/2
+2018-06-01 22:24:12,761:INFO: - Train metrics: accuracy: 0.500 ; loss: 0.000
+2018-06-01 22:24:16,999:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.573
+2018-06-01 22:24:17,006:INFO: - Found new best accuracy
+2018-06-01 22:24:17,012:INFO: Epoch 2/2
+2018-06-01 22:26:06,752:INFO: Loading the datasets...
+2018-06-01 22:26:06,772:INFO: - done.
+2018-06-01 22:26:06,774:INFO: Starting training for 2 epoch(s)
+2018-06-01 22:26:06,774:INFO: Epoch 1/2
+2018-06-01 22:26:27,401:INFO: - Train metrics: accuracy: 0.000 ; loss: 0.000
+2018-06-01 22:26:31,614:INFO: - Eval metrics : accuracy: 0.029 ; loss: 0.000
+2018-06-01 22:26:31,622:INFO: - Found new best accuracy
+2018-06-01 22:26:31,622:INFO: Epoch 2/2
+2018-06-01 22:27:16,662:INFO: Loading the datasets...
+2018-06-01 22:27:16,682:INFO: - done.
+2018-06-01 22:27:16,684:INFO: Starting training for 2 epoch(s)
+2018-06-01 22:27:16,684:INFO: Epoch 1/2
+2018-06-01 22:27:37,607:INFO: - Train metrics: accuracy: 0.500 ; loss: 0.000
+2018-06-01 22:27:41,906:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.573
+2018-06-01 22:27:41,913:INFO: - Found new best accuracy
+2018-06-01 22:27:41,923:INFO: Epoch 2/2
+2018-06-01 22:54:05,884:INFO: Loading the datasets...
+2018-06-01 22:54:05,905:INFO: - done.
+2018-06-01 22:54:05,907:INFO: Starting training for 2 epoch(s)
+2018-06-01 22:54:05,907:INFO: Epoch 1/2
+2018-06-01 22:54:27,045:INFO: - Train metrics: accuracy: 0.500 ; loss: 0.000
+2018-06-01 22:54:31,320:INFO: - Eval metrics : accuracy: 0.992 ; loss: 0.573
+2018-06-01 22:54:31,326:INFO: - Found new best accuracy
+2018-06-01 22:54:31,341:INFO: Epoch 2/2
+2018-06-01 22:58:54,294:INFO: Loading the datasets...
+2018-06-01 22:58:54,315:INFO: - done.
+2018-06-01 22:58:54,317:INFO: Starting training for 2 epoch(s)
+2018-06-01 22:58:54,317:INFO: Epoch 1/2
+2018-06-01 22:59:15,180:INFO: - Train metrics: accuracy: 0.000 ; loss: 0.000
+2018-06-01 22:59:19,447:INFO: - Eval metrics : accuracy: 0.029 ; loss: 0.000
+2018-06-01 22:59:19,454:INFO: - Found new best accuracy
+2018-06-01 22:59:19,478:INFO: Epoch 2/2
+2018-06-01 22:59:40,241:INFO: - Train metrics: accuracy: 0.000 ; loss: 0.000
+2018-06-01 22:59:44,455:INFO: - Eval metrics : accuracy: 0.029 ; loss: 0.000
+2018-06-01 22:59:44,462:INFO: - Found new best accuracy
+2018-06-02 21:56:23,272:INFO: Loading the datasets...
+2018-06-02 21:56:23,293:INFO: - done.
+2018-06-02 21:56:23,295:INFO: Starting training for 2 epoch(s)
+2018-06-02 21:56:23,295:INFO: Epoch 1/2
+2018-06-02 23:32:01,583:INFO: Loading the datasets...
+2018-06-02 23:32:01,604:INFO: - done.
+2018-06-02 23:33:10,940:INFO: Loading the datasets...
+2018-06-02 23:33:10,960:INFO: - done.
+2018-06-02 23:33:13,204:INFO: Starting training for 2 epoch(s)
+2018-06-02 23:33:13,205:INFO: Epoch 1/2
+2018-06-02 23:34:30,678:INFO: Loading the datasets...
+2018-06-02 23:34:30,699:INFO: - done.
+2018-06-03 00:00:35,331:INFO: Loading the datasets...
+2018-06-03 00:00:35,351:INFO: - done.
+2018-06-03 00:00:51,138:INFO: Loading the datasets...
+2018-06-03 00:00:51,158:INFO: - done.
+2018-06-03 00:00:51,479:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:00:51,479:INFO: Epoch 1/2
+2018-06-03 00:02:03,971:INFO: Loading the datasets...
+2018-06-03 00:02:03,991:INFO: - done.
+2018-06-03 00:02:04,309:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:02:04,309:INFO: Epoch 1/2
+2018-06-03 00:02:31,446:INFO: Loading the datasets...
+2018-06-03 00:02:31,466:INFO: - done.
+2018-06-03 00:02:31,777:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:02:31,777:INFO: Epoch 1/2
+2018-06-03 00:02:48,306:INFO: Loading the datasets...
+2018-06-03 00:02:48,327:INFO: - done.
+2018-06-03 00:02:48,641:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:02:48,641:INFO: Epoch 1/2
+2018-06-03 00:03:10,913:INFO: Loading the datasets...
+2018-06-03 00:03:10,933:INFO: - done.
+2018-06-03 00:03:11,245:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:03:11,246:INFO: Epoch 1/2
+2018-06-03 00:03:18,728:INFO: Loading the datasets...
+2018-06-03 00:03:18,751:INFO: - done.
+2018-06-03 00:03:19,060:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:03:19,061:INFO: Epoch 1/2
+2018-06-03 00:04:05,215:INFO: Loading the datasets...
+2018-06-03 00:04:05,235:INFO: - done.
+2018-06-03 00:04:05,551:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:04:05,551:INFO: Epoch 1/2
+2018-06-03 00:04:12,294:INFO: Loading the datasets...
+2018-06-03 00:04:12,314:INFO: - done.
+2018-06-03 00:04:12,631:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:04:12,632:INFO: Epoch 1/2
+2018-06-03 00:04:36,965:INFO: Loading the datasets...
+2018-06-03 00:04:36,986:INFO: - done.
+2018-06-03 00:04:37,313:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:04:37,313:INFO: Epoch 1/2
+2018-06-03 00:04:45,836:INFO: Loading the datasets...
+2018-06-03 00:04:45,857:INFO: - done.
+2018-06-03 00:04:46,174:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:04:46,175:INFO: Epoch 1/2
+2018-06-03 00:06:01,636:INFO: Loading the datasets...
+2018-06-03 00:06:01,655:INFO: - done.
+2018-06-03 00:06:01,977:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:06:01,977:INFO: Epoch 1/2
+2018-06-03 00:06:30,380:INFO: Loading the datasets...
+2018-06-03 00:06:30,400:INFO: - done.
+2018-06-03 00:06:30,734:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:06:30,734:INFO: Epoch 1/2
+2018-06-03 00:06:46,205:INFO: Loading the datasets...
+2018-06-03 00:06:46,225:INFO: - done.
+2018-06-03 00:06:46,533:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:06:46,533:INFO: Epoch 1/2
+2018-06-03 00:06:57,831:INFO: Loading the datasets...
+2018-06-03 00:06:57,852:INFO: - done.
+2018-06-03 00:06:58,167:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:06:58,167:INFO: Epoch 1/2
+2018-06-03 00:07:09,581:INFO: Loading the datasets...
+2018-06-03 00:07:09,602:INFO: - done.
+2018-06-03 00:07:09,919:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:07:09,920:INFO: Epoch 1/2
+2018-06-03 00:07:23,850:INFO: Loading the datasets...
+2018-06-03 00:07:23,873:INFO: - done.
+2018-06-03 00:07:24,200:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:07:24,200:INFO: Epoch 1/2
+2018-06-03 00:09:17,096:INFO: Loading the datasets...
+2018-06-03 00:09:17,117:INFO: - done.
+2018-06-03 00:09:17,436:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:09:17,436:INFO: Epoch 1/2
+2018-06-03 00:13:46,329:INFO: Loading the datasets...
+2018-06-03 00:13:46,349:INFO: - done.
+2018-06-03 00:13:46,661:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:13:46,661:INFO: Epoch 1/2
+2018-06-03 00:13:57,536:INFO: Loading the datasets...
+2018-06-03 00:13:57,557:INFO: - done.
+2018-06-03 00:13:57,880:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:13:57,880:INFO: Epoch 1/2
+2018-06-03 00:18:34,794:INFO: Loading the datasets...
+2018-06-03 00:18:34,815:INFO: - done.
+2018-06-03 00:18:35,127:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:18:35,127:INFO: Epoch 1/2
+2018-06-03 00:23:55,896:INFO: Loading the datasets...
+2018-06-03 00:23:55,917:INFO: - done.
+2018-06-03 00:23:56,230:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:23:56,230:INFO: Epoch 1/2
+2018-06-03 00:24:13,494:INFO: Loading the datasets...
+2018-06-03 00:24:13,514:INFO: - done.
+2018-06-03 00:24:13,826:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:24:13,826:INFO: Epoch 1/2
+2018-06-03 00:24:23,998:INFO: Loading the datasets...
+2018-06-03 00:24:24,018:INFO: - done.
+2018-06-03 00:24:24,330:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:24:24,330:INFO: Epoch 1/2
+2018-06-03 00:24:33,891:INFO: Loading the datasets...
+2018-06-03 00:24:33,913:INFO: - done.
+2018-06-03 00:24:34,241:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:24:34,241:INFO: Epoch 1/2
+2018-06-03 00:24:58,291:INFO: Loading the datasets...
+2018-06-03 00:24:58,313:INFO: - done.
+2018-06-03 00:24:58,630:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:24:58,630:INFO: Epoch 1/2
+2018-06-03 00:25:39,955:INFO: Loading the datasets...
+2018-06-03 00:25:39,976:INFO: - done.
+2018-06-03 00:25:40,288:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:25:40,289:INFO: Epoch 1/2
+2018-06-03 00:32:20,697:INFO: Loading the datasets...
+2018-06-03 00:32:20,717:INFO: - done.
+2018-06-03 00:32:21,030:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:32:21,030:INFO: Epoch 1/2
+2018-06-03 00:32:41,268:INFO: Loading the datasets...
+2018-06-03 00:32:41,289:INFO: - done.
+2018-06-03 00:32:41,616:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:32:41,616:INFO: Epoch 1/2
+2018-06-03 00:33:22,133:INFO: Loading the datasets...
+2018-06-03 00:33:22,153:INFO: - done.
+2018-06-03 00:33:22,469:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:33:22,469:INFO: Epoch 1/2
+2018-06-03 00:33:33,274:INFO: Loading the datasets...
+2018-06-03 00:33:33,294:INFO: - done.
+2018-06-03 00:33:33,614:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:33:33,614:INFO: Epoch 1/2
+2018-06-03 00:36:08,340:INFO: Loading the datasets...
+2018-06-03 00:36:08,360:INFO: - done.
+2018-06-03 00:36:08,682:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:36:08,682:INFO: Epoch 1/2
+2018-06-03 00:38:23,645:INFO: Loading the datasets...
+2018-06-03 00:38:23,666:INFO: - done.
+2018-06-03 00:38:23,991:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:38:23,991:INFO: Epoch 1/2
+2018-06-03 00:46:31,303:INFO: Loading the datasets...
+2018-06-03 00:46:31,324:INFO: - done.
+2018-06-03 00:46:31,654:INFO: Starting training for 2 epoch(s)
+2018-06-03 00:46:31,655:INFO: Epoch 1/2
+2018-06-03 01:20:25,435:INFO: - Train metrics: accuracy: 0.000 ; loss: 0.430
