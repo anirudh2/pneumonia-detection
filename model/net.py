@@ -33,15 +33,15 @@ class Net(nn.Module):
         """
         super(Net, self).__init__()
         self.num_channels = params.num_channels
-        
+
         # each of the convolution layers below have the arguments (input_channels, output_channels, filter_size,
         # stride, padding). We also include batch normalisation layers that help stabilise training.
         # For more details on how to use these layers, check out the documentation.
         self.conv1 = nn.Conv2d(1, self.num_channels, 26, stride=4, padding=1)
-        # 
+        #
         # 1 fully connected layers to transform the output of the convolution layers to the final output
         self.fc1 = nn.Linear(self.num_channels*25*25, 1)
-        
+
         self.dropout_rate = params.dropout_rate
 
     def forward(self, s):
@@ -62,15 +62,15 @@ class Net(nn.Module):
         batch_size = out1.size()[0]
         out2 = F.relu(F.max_pool2d(out1, 2))
 
-        # flatten the output for each image       
+        # flatten the output for each image
 #         pdb.set_trace()
         out3 = out2.view(batch_size, self.num_channels*25*25)
-        
+
         out4 = self.fc1(out3)
 #         pdb.set_trace()
         out5 = F.relu(out4)
         out6 = F.dropout(out5)
-        
+
         # apply 1 fully connected layer with dropout
 #         s = F.dropout(F.relu())
 #         pdb.set_trace()
@@ -93,21 +93,20 @@ def loss_fn(outputs, labels):
     Note: you may use a standard loss function from http://pytorch.org/docs/master/nn.html#loss-functions. This example
           demonstrates how you can easily define a custom loss function.
     """
-#     num_examples = outputs.size()[0]
-#     pdb.set_trace()
-#     return -torch.sum(outputs[range(num_examples), labels])/num_examples
-#     pdb.set_trace()
-    weights = torch.ones(labels.size())
-    weights[labels==1] = 100
-    weights[labels==0] = 0
-    loss = nn.BCEWithLogitsLoss(weight=weights)
-#     pdb.set_trace()
-#     print(nn.Sigmoid(outputs))
-
 #     # Manually calculating loss for comparision
 #     tmpFn = nn.Sigmoid()
 #     loss_manual = np.mean(np.log(1-tmpFn(outputs).data.numpy()))
 #     pdb.set_trace()
+#     num_examples = outputs.size()[0]
+#     return -torch.sum(outputs[range(num_examples), labels])/num_examples
+
+    # pdb.set_trace()
+    weights = torch.ones(labels.size())
+    weights[labels==1] = 100
+    weights[labels==0] = 0
+    loss = nn.BCEWithLogitsLoss(weight=weights)
+
+
     return loss(outputs, labels.float())
 
 
@@ -121,8 +120,8 @@ def accuracy(outputs, labels):
 
     Returns: (float) accuracy in [0,1]
     """
-#     pdb.set_trace()
-    outputs = np.argmax(outputs, axis=0)
+    # pdb.set_trace()
+    outputs = np.argmax(outputs, axis=1)
     return np.sum(outputs==labels)/float(labels.size)
 
 

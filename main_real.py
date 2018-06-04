@@ -4,14 +4,14 @@ import argparse
 import logging
 import os
 import pdb
-    
+
 import numpy as np
 import torch
 import torch.optim as optim
 from torch.autograd import Variable
 from tqdm import tqdm
 from PIL import Image
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 import utils
@@ -30,9 +30,9 @@ parser.add_argument('--restore_file', default=None,
 
 
 def evaluate_val(model, dataloader, optimizer, scheduler):
-    
+
     model.eval()
-    
+
 
 def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
     """Train the model on `num_steps` batches
@@ -46,14 +46,14 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
         params: (Params) hyperparameters
         num_steps: (int) number of batches to train on, each of size params.batch_size
     """
-    
+
     # set model to training mode
     model.train()
-    
+
     # summary for current training loop and a running average object for loss
     summ = []
     loss_avg = utils.RunningAverage()
-    
+
     # Use tqdm for progress bar
     with tqdm(total=len(dataloader)) as t:
         for i, (train_batch, labels_batch) in enumerate(dataloader):
@@ -62,27 +62,25 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
                 train_batch, labels_batch = train_batch.cuda(async=True), labels_batch.cuda(async=True)
             # convert to torch Variables
             #train_batch, labels_batch = Variable(train_batch), Variable(labels_batch)
-    #             pdb.set_trace()
+
             # compute model output and loss
-            
+
             labels_batch_rs = torch.zeros(train_batch.size()[0],2)
-#             pdb.set_trace()
             labels_batch_rs[:,1] = labels_batch
             labels_batch_rs[:,0] = torch.abs(1-labels_batch)
-        
+
             train_batch_in = torch.autograd.Variable(train_batch)
             labels_batch_in = torch.autograd.Variable(labels_batch_rs)
-#             pdb.set_trace()
             output_batch = model(train_batch_in)
-#             pdb.set_trace()
-            loss = loss_fn(output_batch, labels_batch_in) 
+
+            loss = loss_fn(output_batch, labels_batch_in)
             # clear previous gradients, compute gradients of all variables wrt loss
             optimizer.zero_grad()
             loss.backward()
-            
+
             # performs updates using calculated gradients
             optimizer.step()
-            
+
             # Evaluate summaries only once in a while
             if i % params.save_summary_steps == 0:
                 # extract data from torch Variable, move to cpu, convert to numpy arrays
@@ -138,7 +136,7 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
         train(model, optimizer, loss_fn, train_dataloader, metrics, params, scheduler)
 
         # Evaluate for one epoch on validation set
-        
+
         val_metrics = evaluate(model, loss_fn, val_dataloader, metrics, params)
 
         val_acc = val_metrics['accuracy']
@@ -166,15 +164,15 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
 
 
 if __name__ == '__main__':
-    
+
     nnIsTrained = True
-    
+
     # Load the parameters from json file
     args = parser.parse_args()
     json_path = os.path.join(args.model_dir, 'params.json')
     assert os.path.isfile(json_path), "No json configuration file found at {}".format(json_path)
     params = utils.Params(json_path)
-    
+
     # use GPU if available
     params.cuda = torch.cuda.is_available()
 
@@ -201,8 +199,8 @@ if __name__ == '__main__':
         model = torch.nn.DataParallel(model).cuda()
     else:
         model = DenseNet121(params.num_classes, nnIsTrained)
-    
-    optimizer = optim.Adam(model.parameters(), lr=params.learning_rate, betas=(0.9,0.999), eps=params.eps, 
+
+    optimizer = optim.Adam(model.parameters(), lr=params.learning_rate, betas=(0.9,0.999), eps=params.eps,
                            weight_decay=params.weight_decay)
     scheduler =  ReduceLROnPlateau(optimizer, factor = params.factor, patience = params.patience, mode = 'min')
 

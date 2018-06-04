@@ -10,6 +10,7 @@ from torch.autograd import Variable
 import utils
 import model.net as net
 import model.data_loader as data_loader
+import pdb
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='data/224x224_CXR', help="Directory containing the dataset")
@@ -45,18 +46,25 @@ def evaluate(model, loss_fn, dataloader, metrics, params):
         # fetch the next evaluation batch
         data_batch, labels_batch = Variable(data_batch), Variable(labels_batch)
 
+        labels_batch_rs = torch.zeros(labels_batch.size()[0],2)
+        labels_batch_rs[:,1] = labels_batch
+        labels_batch_rs[:,0] = torch.abs(1-labels_batch)
+
+        data_batch_in = torch.autograd.Variable(data_batch)
+        labels_batch_in = torch.autograd.Variable(labels_batch_rs)
         # compute model output
-        output_batch = model(data_batch)
-        loss = loss_fn(output_batch, labels_batch)
+        output_batch = model(data_batch_in)
+        # pdb.set_trace()
+        loss = loss_fn(output_batch, labels_batch_in)
 
         # extract data from torch Variable, move to cpu, convert to numpy arrays
         output_batch = output_batch.data.cpu().numpy()
         labels_batch = labels_batch.data.cpu().numpy()
 
-        # compute all metrics on this batch
+        # compute all metrics on this batch (accuracy)
         summary_batch = {metric: metrics[metric](output_batch, labels_batch)
                          for metric in metrics}
-        summary_batch['loss'] = loss.data[0]
+        summary_batch['loss'] = loss.data.item()
         summ.append(summary_batch)
 
     # compute mean of all metrics in summary
