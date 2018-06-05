@@ -21,6 +21,8 @@ from evaluate import evaluate
 from DensenetModels import DenseNet121
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
+from sklearn.metrics.ranking import roc_auc_score
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='data/224x224_CXR', help="Directory containing the dataset")
 parser.add_argument('--model_dir', default='experiments/base_model', help="Directory containing params.json")
@@ -29,9 +31,54 @@ parser.add_argument('--restore_file', default=None,
                     training")  # 'best' or 'train'
 
 
-def evaluate_val(model, dataloader, optimizer, scheduler):
+def computeAUROC(targets, preds, num_classes):
+    auroc_vec = []
+    targets_in = targets.cpu().numpy()
+    preds_in = preds.cpu().numpy()
+    
+    for i in range(num_classes):
+        auroc_vec.append(roc_auc_score(target_in[:,i], preds[:,i]))
+        
+    return auroc_vec
+
+def evaluate_test(model, dataloader, optimizer, scheduler, loss_fn):
+    
+
+def evaluate_val(model, dataloader, optimizer, scheduler, loss_fn):
 
     model.eval()
+    
+    loss_val = 0
+    loss_val_norm = 0
+    loss_tensor_mean = 0
+    with tqdm(total=len(dataloader)) as t:
+        for i, (val_batch, target) in enumerate(dataloader):
+            with torch.no_grad():
+    #         if params.cuda:
+    #             val_batch, target = val_batch.cuda(async=True), target.cuda(async=True)    
+                target_batch = torch.zeros(val_batch.size()[0],2)
+                target_batch[:,1] = target
+                target_batch[:,0] = torch.abs(1-target)
+
+                if params.cuda:
+                    val_batch, target_batch = val_batch.cuda(async=True), target_batch.cuda(async=True)
+
+#                 val_batch_in = torch.autograd.Variable(val_batch, volatile=True)
+#                 target_in = torch.autograd.Variable(target_batch, volatile=True)
+                val_pred = model(val_batch)
+
+                loss_tensor = loss_fn(val_pred, target_batch)
+                loss_tensor_mean += loss_tensor
+
+                loss_val += loss_tensor.data[0]
+                loss_val_norm += 1
+                
+                t.update()
+
+    loss_norm = loss_val / loss_val_norm
+    loss_tensor_norm = loss_tensor_mean / loss_val_norm
+    
+    return loss_norm, loss_tensor_norm
 
 
 def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
@@ -57,9 +104,9 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
     # Use tqdm for progress bar
     with tqdm(total=len(dataloader)) as t:
         for i, (train_batch, labels_batch) in enumerate(dataloader):
-            # move to GPU if available
-            if params.cuda:
-                train_batch, labels_batch = train_batch.cuda(async=True), labels_batch.cuda(async=True)
+#             # move to GPU if available
+#             if params.cuda:
+#                 train_batch, labels_batch = train_batch.cuda(async=True), labels_batch.cuda(async=True)
             # convert to torch Variables
             #train_batch, labels_batch = Variable(train_batch), Variable(labels_batch)
 
@@ -68,6 +115,10 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
             labels_batch_rs = torch.zeros(train_batch.size()[0],2)
             labels_batch_rs[:,1] = labels_batch
             labels_batch_rs[:,0] = torch.abs(1-labels_batch)
+            
+            # move to GPU if available
+            if params.cuda:
+                train_batch, labels_batch_rs = train_batch.cuda(async=True), labels_batch_rs.cuda(async=True)
 
             train_batch_in = torch.autograd.Variable(train_batch)
             labels_batch_in = torch.autograd.Variable(labels_batch_rs)
@@ -127,6 +178,8 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
         utils.load_checkpoint(restore_path, model, optimizer)
 
     best_val_acc = 0.0
+    
+    min_loss = 1000000
 
     for epoch in range(params.num_epochs):
         # Run one epoch
@@ -134,33 +187,42 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
 
         # compute number of batches in one epoch (one full pass over the training set)
         train(model, optimizer, loss_fn, train_dataloader, metrics, params, scheduler)
+        
+        loss_val, loss_tensor = evaluate_val(model, val_dataloader, optimizer, scheduler, loss_fn)
+        
+        scheduler.step(loss_tensor.data[0])
+        
+        loss_val = loss_val.data.cpu().numpy()
+        if loss_val < min_loss:
+            min_loss = loss_val
+        print(loss_val)
 
-        # Evaluate for one epoch on validation set
+#         # Evaluate for one epoch on validation set
 
-        val_metrics = evaluate(model, loss_fn, val_dataloader, metrics, params)
+#         val_metrics = evaluate(model, loss_fn, val_dataloader, metrics, params)
 
-        val_acc = val_metrics['accuracy']
-        is_best = val_acc>=best_val_acc
+#         val_acc = val_metrics['accuracy']
+#         is_best = val_acc>=best_val_acc
 
-        # Save weights
-        utils.save_checkpoint({'epoch': epoch + 1,
-                               'state_dict': model.state_dict(),
-                               'optim_dict' : optimizer.state_dict()},
-                               is_best=is_best,
-                               checkpoint=model_dir)
+#         # Save weights
+#         utils.save_checkpoint({'epoch': epoch + 1,
+#                                'state_dict': model.state_dict(),
+#                                'optim_dict' : optimizer.state_dict()},
+#                                is_best=is_best,
+#                                checkpoint=model_dir)
 
-        # If best_eval, best_save_path
-        if is_best:
-            logging.info("- Found new best accuracy")
-            best_val_acc = val_acc
+#         # If best_eval, best_save_path
+#         if is_best:
+#             logging.info("- Found new best accuracy")
+#             best_val_acc = val_acc
 
-            # Save best val metrics in a json file in the model directory
-            best_json_path = os.path.join(model_dir, "metrics_val_best_weights.json")
-            utils.save_dict_to_json(val_metrics, best_json_path)
+#             # Save best val metrics in a json file in the model directory
+#             best_json_path = os.path.join(model_dir, "metrics_val_best_weights.json")
+#             utils.save_dict_to_json(val_metrics, best_json_path)
 
-        # Save latest val metrics in a json file in the model directory
-        last_json_path = os.path.join(model_dir, "metrics_val_last_weights.json")
-        utils.save_dict_to_json(val_metrics, last_json_path)
+#         # Save latest val metrics in a json file in the model directory
+#         last_json_path = os.path.join(model_dir, "metrics_val_last_weights.json")
+#         utils.save_dict_to_json(val_metrics, last_json_path)
 
 
 if __name__ == '__main__':
