@@ -4,6 +4,7 @@ import argparse
 import logging
 import os
 import pdb
+import math
 
 import numpy as np
 import torch
@@ -22,6 +23,8 @@ from DensenetModels import DenseNet121
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 from sklearn.metrics.ranking import roc_auc_score
+from sklearn.metrics import f1_score
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='data/224x224_CXR', help="Directory containing the dataset")
@@ -37,11 +40,14 @@ def computeAUROC(targets, preds, num_classes):
     preds_in = preds.cpu().numpy()
     
     for i in range(num_classes):
-        auroc_vec.append(roc_auc_score(target_in[:,i], preds[:,i]))
-        
-    return auroc_vec
+        try:
+            auroc_vec.append(roc_auc_score(targets_in[:,i], preds[:,i]))
+        except:
+            pass
+    return auroc_vec   
+   
 
-def evaluate_test(model, dataloader, optimizer, scheduler, loss_fn):
+# def evaluate_test(model, dataloader, optimizer, scheduler, loss_fn):
     
 
 def evaluate_val(model, dataloader, optimizer, scheduler, loss_fn):
@@ -51,6 +57,11 @@ def evaluate_val(model, dataloader, optimizer, scheduler, loss_fn):
     loss_val = 0
     loss_val_norm = 0
     loss_tensor_mean = 0
+    auroc_mean = 0
+    counter = 0
+    f1_sum = 0
+    all_true = np.array([])
+    all_pred = np.array([])
     with tqdm(total=len(dataloader)) as t:
         for i, (val_batch, target) in enumerate(dataloader):
             with torch.no_grad():
@@ -73,8 +84,28 @@ def evaluate_val(model, dataloader, optimizer, scheduler, loss_fn):
                 loss_val += loss_tensor.data[0]
                 loss_val_norm += 1
                 
+                true_curr = np.argmax(target_batch, axis=1)
+                pred_curr = np.argmax(val_pred.cpu().numpy(), axis=1)
+                
+                all_true = np.append(all_true, true_curr)
+                all_pred = np.append(all_pred, pred_curr)
+                
+#                 Find the F1 Score
+#                 f1 = computeF1Score(target_batch, val_pred)
+#                 if (not math.isnan(f1)):
+#                     f1_sum += f1
+#                     counter += 1
+                
+                # Find AUROC
+#                 auroc_curr = computeAUROC(target_batch, val_pred, 2)
+#                 temp = np.array(auroc_curr).mean()
+#                 if (not math.isnan(temp)):
+#                     auroc_mean += temp
+#                     counter += 1
                 t.update()
 
+    f1 = f1_score(all_true, all_pred)
+    print('The F1 Score for Val is:', f1)
     loss_norm = loss_val / loss_val_norm
     loss_tensor_norm = loss_tensor_mean / loss_val_norm
     
@@ -100,7 +131,10 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
     # summary for current training loop and a running average object for loss
     summ = []
     loss_avg = utils.RunningAverage()
-
+    
+    all_true = np.array([])
+    all_pred = np.array([])
+    
     # Use tqdm for progress bar
     with tqdm(total=len(dataloader)) as t:
         for i, (train_batch, labels_batch) in enumerate(dataloader):
@@ -116,14 +150,32 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
             labels_batch_rs[:,1] = labels_batch
             labels_batch_rs[:,0] = torch.abs(1-labels_batch)
             
+#             pdb.set_trace()
+            weights = torch.ones(train_batch.size()[0],2)
+            weights[labels_batch==1,:] = 90
+            weights[labels_batch==0,:] = 1
+            
             # move to GPU if available
             if params.cuda:
-                train_batch, labels_batch_rs = train_batch.cuda(async=True), labels_batch_rs.cuda(async=True)
+                train_batch = train_batch.cuda(async=True)
+                labels_batch_rs = labels_batch_rs.cuda(async=True)
+                weights_batch = weights.cuda(async=True)
+                
+            loss_fn = loss_fn = torch.nn.BCELoss(weight = weights_batch, size_average=True)
 
             train_batch_in = torch.autograd.Variable(train_batch)
             labels_batch_in = torch.autograd.Variable(labels_batch_rs)
             output_batch = model(train_batch_in)
-
+            
+            output_pred = output_batch
+            
+            true_curr = np.argmax(labels_batch_rs, axis=1)
+            pred_curr = np.argmax(output_pred.cpu().detach().numpy(), axis=1)
+                
+            all_true = np.append(all_true, true_curr)
+            all_pred = np.append(all_pred, pred_curr)
+            
+#             pdb.set_trace()
             loss = loss_fn(output_batch, labels_batch_in)
             # clear previous gradients, compute gradients of all variables wrt loss
             optimizer.zero_grad()
@@ -150,6 +202,9 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
             t.set_postfix(loss='{:05.3f}'.format(loss_avg()))
             t.update()
 
+#     pdb.set_trace()
+    f1 = f1_score(all_true, all_pred)
+    print('The F1 Score for Train is:', f1)
     # compute mean of all metrics in summary
     metrics_mean = {metric:np.mean([x[metric] for x in summ]) for metric in summ[0]}
     metrics_string = " ; ".join("{}: {:05.3f}".format(k, v) for k, v in metrics_mean.items())
