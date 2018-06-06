@@ -20,6 +20,7 @@ import model.net as net
 import model.data_loader as data_loader
 from evaluate import evaluate
 from DensenetModels import DenseNet121
+from DensenetModels import DenseNet201
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 from sklearn.metrics.ranking import roc_auc_score
@@ -104,6 +105,7 @@ def evaluate_val(model, dataloader, optimizer, scheduler, loss_fn):
 #                     counter += 1
                 t.update()
 
+    pdb.set_trace()
     f1 = f1_score(all_true, all_pred)
     print('The F1 Score for Val is:', f1)
     loss_norm = loss_val / loss_val_norm
@@ -312,10 +314,10 @@ if __name__ == '__main__':
 
     # Define the model and optimizer
     if params.cuda:
-        model = DenseNet121(params.num_classes, nnIsTrained).cuda()
+        model = DenseNet201(params.num_classes, nnIsTrained).cuda()
         model = torch.nn.DataParallel(model).cuda()
     else:
-        model = DenseNet121(params.num_classes, nnIsTrained)
+        model = DenseNet201(params.num_classes, nnIsTrained)
 
     optimizer = optim.Adam(model.parameters(), lr=params.learning_rate, betas=(0.9,0.999), eps=params.eps,
                            weight_decay=params.weight_decay)
