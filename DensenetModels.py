@@ -9,7 +9,7 @@ import pdb
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from sklearn.metrics import roc_auc_score
-
+import model.aadensenet
 import torchvision
 
 class DenseNet121(nn.Module):
@@ -18,7 +18,9 @@ class DenseNet121(nn.Module):
 
         super(DenseNet121, self).__init__()
 
-        self.densenet121 = torchvision.models.densenet121(pretrained=isTrained)
+#         self.densenet121 = torchvision.models.densenet121(pretrained=isTrained)
+
+        self.densenet121 = model.aadensenet.densenet121(pretrained=isTrained)
 
         kernelCount = self.densenet121.classifier.in_features
 

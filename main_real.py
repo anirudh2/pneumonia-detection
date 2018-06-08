@@ -5,6 +5,7 @@ import logging
 import os
 import pdb
 import math
+import scipy.io as io
 
 import numpy as np
 import torch
@@ -26,25 +27,22 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from sklearn.metrics.ranking import roc_auc_score
 from sklearn.metrics import f1_score
 
-
+# 224x224_CXR
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_dir', default='data/224x224_CXR', help="Directory containing the dataset")
+parser.add_argument('--data_dir', default='data/balanced', help="Directory containing the dataset")
 parser.add_argument('--model_dir', default='experiments/base_model', help="Directory containing params.json")
 parser.add_argument('--restore_file', default=None,
                     help="Optional, name of the file in --model_dir containing weights to reload before \
                     training")  # 'best' or 'train'
 
 
-def computeAUROC(targets, preds, num_classes):
+def computeAUROC(targets, preds):
     auroc_vec = []
-    targets_in = targets.cpu().numpy()
-    preds_in = preds.cpu().numpy()
     
-    for i in range(num_classes):
-        try:
-            auroc_vec.append(roc_auc_score(targets_in[:,i], preds[:,i]))
-        except:
-            pass
+    try:
+        auroc_vec.append(roc_auc_score(targets, preds))
+    except:
+        pass
     return auroc_vec   
    
 
@@ -105,13 +103,14 @@ def evaluate_val(model, dataloader, optimizer, scheduler, loss_fn):
 #                     counter += 1
                 t.update()
 
-    pdb.set_trace()
+#     pdb.set_trace()
+    auroc_curr = np.array(computeAUROC(all_true, all_pred)).mean()
     f1 = f1_score(all_true, all_pred)
     print('The F1 Score for Val is:', f1)
     loss_norm = loss_val / loss_val_norm
     loss_tensor_norm = loss_tensor_mean / loss_val_norm
     
-    return loss_norm, loss_tensor_norm
+    return loss_norm, loss_tensor_norm, f1, auroc_curr
 
 
 def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
@@ -200,7 +199,7 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
 
             # update the average loss
             loss_avg.update(loss.data[0])
-
+#             pdb.set_trace()
             t.set_postfix(loss='{:05.3f}'.format(loss_avg()))
             t.update()
 
@@ -211,6 +210,7 @@ def train(model, optimizer, loss_fn, dataloader, metrics, params, scheduler):
     metrics_mean = {metric:np.mean([x[metric] for x in summ]) for metric in summ[0]}
     metrics_string = " ; ".join("{}: {:05.3f}".format(k, v) for k, v in metrics_mean.items())
     logging.info("- Train metrics: " + metrics_string)
+    return loss_avg().data.cpu().numpy()
 
 
 def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_fn, metrics, params, model_dir, scheduler,
@@ -237,15 +237,21 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
     best_val_acc = 0.0
     
     min_loss = 1000000
-
+    loss_arr = np.array([])
+    f1_scores = np.array([])
+    auroc_vec = np.array([])
+    
     for epoch in range(params.num_epochs):
         # Run one epoch
         logging.info("Epoch {}/{}".format(epoch + 1, params.num_epochs))
 
         # compute number of batches in one epoch (one full pass over the training set)
-        train(model, optimizer, loss_fn, train_dataloader, metrics, params, scheduler)
+        curr_loss_train = train(model, optimizer, loss_fn, train_dataloader, metrics, params, scheduler)
+        loss_arr = np.append(loss_arr, curr_loss_train)
         
-        loss_val, loss_tensor = evaluate_val(model, val_dataloader, optimizer, scheduler, loss_fn)
+        loss_val, loss_tensor, f1, auroc_curr = evaluate_val(model, val_dataloader, optimizer, scheduler, loss_fn)
+        f1_scores = np.append(f1_scores, f1)
+        auroc_vec = np.append(auroc_vec, auroc_curr)
         
         scheduler.step(loss_tensor.data[0])
         
@@ -280,6 +286,9 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
 #         # Save latest val metrics in a json file in the model directory
 #         last_json_path = os.path.join(model_dir, "metrics_val_last_weights.json")
 #         utils.save_dict_to_json(val_metrics, last_json_path)
+    io.savemat('data/train_loss.mat', mdict={'loss_arr': loss_arr})
+    io.savemat('data/val_f1.mat', mdict={'f1_scores': f1_scores})
+    io.savemat('data/val_auroc.mat', mdict={'auroc_vec': auroc_vec})
 
 
 if __name__ == '__main__':
@@ -314,13 +323,13 @@ if __name__ == '__main__':
 
     # Define the model and optimizer
     if params.cuda:
-        model = DenseNet201(params.num_classes, nnIsTrained).cuda()
+        model = DenseNet121(params.num_classes, nnIsTrained).cuda()
         model = torch.nn.DataParallel(model).cuda()
     else:
-        model = DenseNet201(params.num_classes, nnIsTrained)
+        model = DenseNet121(params.num_classes, nnIsTrained)
 
-    optimizer = optim.Adam(model.parameters(), lr=params.learning_rate, betas=(0.9,0.999), eps=params.eps,
-                           weight_decay=params.weight_decay)
+    optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=params.learning_rate, betas=(0.9,0.999),
+                           eps=params.eps,weight_decay=params.weight_decay)
     scheduler =  ReduceLROnPlateau(optimizer, factor = params.factor, patience = params.patience, mode = 'min')
 
     # fetch loss function and metrics
